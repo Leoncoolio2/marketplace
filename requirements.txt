@@ -3,3 +3,4 @@ pydantic
 uvicorn
 sqlalchemy
 pyyaml
+pytest>=7
