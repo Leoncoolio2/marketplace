@@ -1,0 +1,9 @@
+agent:
+  id: project_autonomous
+  name: Marketplace Autonomous Agent
+
+  goal:
+    primary: "Build and launch marketplace MVP"
+
+  lifecycle:
+    state: bootstrap
