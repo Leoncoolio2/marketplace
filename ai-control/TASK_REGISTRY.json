@@ -3,12 +3,14 @@
   "tasks": [
     {
       "id": "config-module",
+      "description": "Implement global ConfigModule with environment loading",
       "phase": 0,
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": []
     },
     {
       "id": "env-validation",
+      "description": "Add Joi validation for environment variables",
       "phase": 0,
       "status": "in_progress",
       "dependencies": [
@@ -17,34 +19,11 @@
     },
     {
       "id": "prisma-setup",
+      "description": "Ensure Prisma is properly configured and integrated",
       "phase": 0,
       "status": "pending",
       "dependencies": [
         "env-validation"
-      ]
-    },
-    {
-      "id": "global-validation-pipe",
-      "phase": 0,
-      "status": "pending",
-      "dependencies": [
-        "prisma-setup"
-      ]
-    },
-    {
-      "id": "global-error-filter",
-      "phase": 0,
-      "status": "pending",
-      "dependencies": [
-        "global-validation-pipe"
-      ]
-    },
-    {
-      "id": "structured-logger",
-      "phase": 0,
-      "status": "pending",
-      "dependencies": [
-        "global-error-filter"
       ]
     }
   ]
