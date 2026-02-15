@@ -12,7 +12,7 @@
       "id": "env-validation",
       "description": "Add Joi validation for environment variables",
       "phase": 0,
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         "config-module"
       ]
