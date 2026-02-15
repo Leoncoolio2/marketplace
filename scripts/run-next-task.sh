@@ -6,7 +6,6 @@ FILE="ai-control/TASK_REGISTRY.json"
 
 echo "Reading task registry..."
 
-# Leia esimene pending task
 TASK=$(jq -r '.tasks[] | select(.status=="pending") | .id' $FILE | head -n 1)
 
 if [ -z "$TASK" ]; then
@@ -24,7 +23,6 @@ fi
 echo "Next task: $TASK"
 echo "Description: $DESCRIPTION"
 
-# Märgi in_progress
 tmp=$(mktemp)
 jq "(.tasks[] | select(.id==\"$TASK\") | .status) = \"in_progress\"" $FILE > "$tmp"
 mv "$tmp" $FILE
