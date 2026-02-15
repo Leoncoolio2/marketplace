@@ -18,7 +18,7 @@
     {
       "id": "prisma-setup",
       "phase": 0,
-      "status": "pending",
+      "status": "completed",
       "dependencies": [
         "env-validation"
       ]
