@@ -21,7 +21,7 @@
       "id": "prisma-setup",
       "description": "Ensure Prisma is properly configured and integrated",
       "phase": 0,
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         "env-validation"
       ]

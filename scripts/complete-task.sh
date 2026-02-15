@@ -11,7 +11,11 @@ if [ -z "$TASK" ]; then
 fi
 
 tmp=$(mktemp)
-jq "(.tasks[] | select(.id==\"$TASK\") | .state) = \"completed\"" $FILE > "$tmp"
+jq "(.tasks[] | select(.id==\"$TASK\") | .status) = \"completed\"" $FILE > "$tmp"
 mv "$tmp" $FILE
+
+git add $FILE
+git commit -m "chore(task): mark $TASK as completed"
+git push
 
 echo "Task $TASK marked as completed."
