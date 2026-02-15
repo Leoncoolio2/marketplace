@@ -1,46 +1,32 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -e
 
-REGISTRY="ai-control/TASK_REGISTRY.json"
+FILE="ai-control/TASK_REGISTRY.json"
 
 echo "Reading task registry..."
 
-TASK_ID=$(jq -r '
-  .tasks[]
-  | select(.status=="pending")
-  | select(
-      (.dependencies | length == 0)
-      or
-      (all(.dependencies[]; . as $dep |
-        (.dependencies | length == 0) ))
-    )
-  | .id
-  ' "$REGISTRY" | head -n 1)
+# Leia esimene pending task
+TASK=$(jq -r '.tasks[] | select(.status=="pending") | .id' $FILE | head -n 1)
 
-if [ -z "$TASK_ID" ]; then
-  echo "No pending tasks found."
+if [ -z "$TASK" ]; then
+  echo "No pending tasks."
   exit 0
 fi
 
-echo "Next task: $TASK_ID"
+DESCRIPTION=$(jq -r ".tasks[] | select(.id==\"$TASK\") | .description" $FILE)
 
-echo "Updating status to in_progress..."
+if [ "$DESCRIPTION" == "null" ]; then
+  echo "Task $TASK has no description. Aborting."
+  exit 1
+fi
 
-jq --arg id "$TASK_ID" '
-  .tasks = (.tasks | map(
-    if .id==$id then .status="in_progress" else . end
-  ))
-' "$REGISTRY" > tmp.json && mv tmp.json "$REGISTRY"
+echo "Next task: $TASK"
+echo "Description: $DESCRIPTION"
 
-git add "$REGISTRY"
-git commit -m "chore: set $TASK_ID to in_progress"
+# Märgi in_progress
+tmp=$(mktemp)
+jq "(.tasks[] | select(.id==\"$TASK\") | .status) = \"in_progress\"" $FILE > "$tmp"
+mv "$tmp" $FILE
 
-echo "Creating branch..."
-
-git checkout -b "feature/$TASK_ID"
-
-echo "Branch feature/$TASK_ID created."
-echo ""
-echo "Now implement the task using AI and commit changes."
-echo "After CI passes, run: ./scripts/complete-task.sh $TASK_ID"
+./scripts/ai-runner.sh "$DESCRIPTION"

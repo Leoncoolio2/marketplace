@@ -1,26 +1,21 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -e
 
-TASK_ID=$1
+FILE="ai-control/TASK_REGISTRY.json"
+TASK="$1"
 
-if [ -z "$TASK_ID" ]; then
-  echo "Usage: ./scripts/complete-task.sh <task-id>"
+if [ -z "$TASK" ]; then
+  echo "Usage: ./complete-task.sh task-id"
   exit 1
 fi
 
-REGISTRY="ai-control/TASK_REGISTRY.json"
+tmp=$(mktemp)
+jq "(.tasks[] | select(.id==\"$TASK\") | .status) = \"completed\"" $FILE > "$tmp"
+mv "$tmp" $FILE
 
-echo "Marking $TASK_ID as completed..."
-
-jq --arg id "$TASK_ID" '
-  .tasks = (.tasks | map(
-    if .id==$id then .status="completed" else . end
-  ))
-' "$REGISTRY" > tmp.json && mv tmp.json "$REGISTRY"
-
-git add "$REGISTRY"
-git commit -m "chore: mark $TASK_ID as completed"
+git add $FILE
+git commit -m "chore(task): mark $TASK as completed"
 git push
 
-echo "Task $TASK_ID completed."
+echo "Task $TASK marked as completed."
