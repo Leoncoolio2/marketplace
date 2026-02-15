@@ -11,7 +11,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     });
 
     super({
-      adapter: new PrismaPg(pool),
+      adapter: new PrismaPg(pool) as unknown as never,
     });
   }
 
