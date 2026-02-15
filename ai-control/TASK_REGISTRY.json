@@ -10,7 +10,7 @@
     {
       "id": "env-validation",
       "phase": 0,
-      "status": "pending",
+      "status": "in_progress",
       "dependencies": [
         "config-module"
       ]
@@ -45,111 +45,6 @@
       "status": "pending",
       "dependencies": [
         "global-error-filter"
-      ]
-    },
-    {
-      "id": "user-entity",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "prisma-setup"
-      ]
-    },
-    {
-      "id": "auth-module-base",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "user-entity"
-      ]
-    },
-    {
-      "id": "jwt-strategy",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "auth-module-base"
-      ]
-    },
-    {
-      "id": "role-guard",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "jwt-strategy"
-      ]
-    },
-    {
-      "id": "seller-profile-entity",
-      "phase": 2,
-      "status": "pending",
-      "dependencies": [
-        "user-entity"
-      ]
-    },
-    {
-      "id": "product-entity",
-      "phase": 2,
-      "status": "pending",
-      "dependencies": [
-        "seller-profile-entity"
-      ]
-    },
-    {
-      "id": "preorder-config-entity",
-      "phase": 2,
-      "status": "pending",
-      "dependencies": [
-        "product-entity"
-      ]
-    },
-    {
-      "id": "order-entity",
-      "phase": 3,
-      "status": "pending",
-      "dependencies": [
-        "user-entity"
-      ]
-    },
-    {
-      "id": "order-item-entity",
-      "phase": 3,
-      "status": "pending",
-      "dependencies": [
-        "order-entity",
-        "product-entity"
-      ]
-    },
-    {
-      "id": "order-state-machine",
-      "phase": 3,
-      "status": "pending",
-      "dependencies": [
-        "order-entity"
-      ]
-    },
-    {
-      "id": "auth-endpoints",
-      "phase": 4,
-      "status": "pending",
-      "dependencies": [
-        "role-guard"
-      ]
-    },
-    {
-      "id": "product-endpoints",
-      "phase": 4,
-      "status": "pending",
-      "dependencies": [
-        "preorder-config-entity"
-      ]
-    },
-    {
-      "id": "order-endpoints",
-      "phase": 4,
-      "status": "pending",
-      "dependencies": [
-        "order-state-machine"
       ]
     }
   ]
