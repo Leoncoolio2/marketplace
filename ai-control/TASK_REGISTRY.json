@@ -30,7 +30,7 @@
       "id": "global-validation-pipe",
       "description": "Implement global validation pipe in main.ts using class-validator and class-transformer",
       "phase": 0,
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": [
         "prisma-setup"
       ]
