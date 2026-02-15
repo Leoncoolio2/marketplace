@@ -7,16 +7,18 @@ REGISTRY="ai-control/TASK_REGISTRY.json"
 echo "Reading task registry..."
 
 TASK_ID=$(jq -r '
-  .tasks[]
+  .tasks as $tasks
+  | $tasks[]
   | select(.status=="pending")
   | select(
       (.dependencies | length == 0)
       or
-      (all(.dependencies[]; . as $dep |
-        (.dependencies | length == 0) ))
+      (all(.dependencies[]; 
+          ($tasks[] | select(.id==.) | .status) == "completed"
+      ))
     )
   | .id
-  ' "$REGISTRY" | head -n 1)
+' "$REGISTRY" | head -n 1)
 
 if [ -z "$TASK_ID" ]; then
   echo "No pending tasks found."
