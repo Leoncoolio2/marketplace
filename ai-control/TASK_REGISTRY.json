@@ -13,35 +13,45 @@
       "description": "Add Joi validation for environment variables",
       "phase": 0,
       "status": "completed",
-      "dependencies": ["config-module"]
+      "dependencies": [
+        "config-module"
+      ]
     },
     {
       "id": "prisma-setup",
       "description": "Add .env.example file, add runtime DATABASE_URL validation in PrismaService, and add postinstall script for prisma generate in backend/package.json",
       "phase": 0,
       "status": "completed",
-      "dependencies": ["env-validation"]
+      "dependencies": [
+        "env-validation"
+      ]
     },
     {
       "id": "global-validation-pipe",
       "description": "Implement global validation pipe in main.ts using class-validator and class-transformer",
       "phase": 0,
-      "status": "pending",
-      "dependencies": ["prisma-setup"]
+      "status": "in_progress",
+      "dependencies": [
+        "prisma-setup"
+      ]
     },
     {
       "id": "global-error-filter",
       "description": "Implement global exception filter for consistent API error responses",
       "phase": 0,
       "status": "pending",
-      "dependencies": ["global-validation-pipe"]
+      "dependencies": [
+        "global-validation-pipe"
+      ]
     },
     {
       "id": "structured-logger",
       "description": "Implement structured logging using a logger service (e.g., pino or winston)",
       "phase": 0,
       "status": "pending",
-      "dependencies": ["global-error-filter"]
+      "dependencies": [
+        "global-error-filter"
+      ]
     }
   ]
 }
