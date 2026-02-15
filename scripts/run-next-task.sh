@@ -1,46 +1,44 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -e
 
-REGISTRY="ai-control/TASK_REGISTRY.json"
+FILE="ai-control/TASK_REGISTRY.json"
 
 echo "Reading task registry..."
 
-TASK_ID=$(jq -r '
-  .tasks[]
-  | select(.status=="pending")
-  | select(
-      (.dependencies | length == 0)
-      or
-      (all(.dependencies[]; . as $dep |
-        (.dependencies | length == 0) ))
-    )
-  | .id
-  ' "$REGISTRY" | head -n 1)
+TASK=""
 
-if [ -z "$TASK_ID" ]; then
-  echo "No pending tasks found."
+for id in $(jq -r '.tasks[] | select(.status=="pending") | .id' "$FILE"); do
+  deps=$(jq -r ".tasks[] | select(.id==\"$id\") | .dependencies[]" "$FILE" 2>/dev/null)
+
+  runnable=true
+
+  for dep in $deps; do
+    status=$(jq -r ".tasks[] | select(.id==\"$dep\") | .status" "$FILE")
+    if [ "$status" != "completed" ]; then
+      runnable=false
+      break
+    fi
+  done
+
+  if [ "$runnable" = true ]; then
+    TASK="$id"
+    break
+  fi
+done
+
+if [ -z "$TASK" ]; then
+  echo "No runnable tasks."
   exit 0
 fi
 
-echo "Next task: $TASK_ID"
+DESCRIPTION=$(jq -r ".tasks[] | select(.id==\"$TASK\") | .description" "$FILE")
 
-echo "Updating status to in_progress..."
+echo "Next task: $TASK"
+echo "Description: $DESCRIPTION"
 
-jq --arg id "$TASK_ID" '
-  .tasks = (.tasks | map(
-    if .id==$id then .status="in_progress" else . end
-  ))
-' "$REGISTRY" > tmp.json && mv tmp.json "$REGISTRY"
+tmp=$(mktemp)
+jq "(.tasks[] | select(.id==\"$TASK\") | .status) = \"in_progress\"" "$FILE" > "$tmp"
+mv "$tmp" "$FILE"
 
-git add "$REGISTRY"
-git commit -m "chore: set $TASK_ID to in_progress"
-
-echo "Creating branch..."
-
-git checkout -b "feature/$TASK_ID"
-
-echo "Branch feature/$TASK_ID created."
-echo ""
-echo "Now implement the task using AI and commit changes."
-echo "After CI passes, run: ./scripts/complete-task.sh $TASK_ID"
+./scripts/ai-runner.sh "$DESCRIPTION"
