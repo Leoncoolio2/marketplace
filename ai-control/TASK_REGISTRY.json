@@ -3,154 +3,45 @@
   "tasks": [
     {
       "id": "config-module",
+      "description": "Implement global ConfigModule with environment loading",
       "phase": 0,
-      "status": "in_progress",
+      "status": "completed",
       "dependencies": []
     },
     {
       "id": "env-validation",
+      "description": "Add Joi validation for environment variables",
       "phase": 0,
-      "status": "pending",
-      "dependencies": [
-        "config-module"
-      ]
+      "status": "completed",
+      "dependencies": ["config-module"]
     },
     {
       "id": "prisma-setup",
+      "description": "Add .env.example file, add runtime DATABASE_URL validation in PrismaService, and add postinstall script for prisma generate in backend/package.json",
       "phase": 0,
       "status": "completed",
-      "dependencies": [
-        "env-validation"
-      ]
+      "dependencies": ["env-validation"]
     },
     {
       "id": "global-validation-pipe",
+      "description": "Implement global validation pipe in main.ts using class-validator and class-transformer",
       "phase": 0,
-      "status": "in_progress",
-      "dependencies": [
-        "prisma-setup"
-      ]
+      "status": "pending",
+      "dependencies": ["prisma-setup"]
     },
     {
       "id": "global-error-filter",
+      "description": "Implement global exception filter for consistent API error responses",
       "phase": 0,
       "status": "pending",
-      "dependencies": [
-        "global-validation-pipe"
-      ]
+      "dependencies": ["global-validation-pipe"]
     },
     {
       "id": "structured-logger",
+      "description": "Implement structured logging using a logger service (e.g., pino or winston)",
       "phase": 0,
       "status": "pending",
-      "dependencies": [
-        "global-error-filter"
-      ]
-    },
-    {
-      "id": "user-entity",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "prisma-setup"
-      ]
-    },
-    {
-      "id": "auth-module-base",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "user-entity"
-      ]
-    },
-    {
-      "id": "jwt-strategy",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "auth-module-base"
-      ]
-    },
-    {
-      "id": "role-guard",
-      "phase": 1,
-      "status": "pending",
-      "dependencies": [
-        "jwt-strategy"
-      ]
-    },
-    {
-      "id": "seller-profile-entity",
-      "phase": 2,
-      "status": "pending",
-      "dependencies": [
-        "user-entity"
-      ]
-    },
-    {
-      "id": "product-entity",
-      "phase": 2,
-      "status": "pending",
-      "dependencies": [
-        "seller-profile-entity"
-      ]
-    },
-    {
-      "id": "preorder-config-entity",
-      "phase": 2,
-      "status": "pending",
-      "dependencies": [
-        "product-entity"
-      ]
-    },
-    {
-      "id": "order-entity",
-      "phase": 3,
-      "status": "pending",
-      "dependencies": [
-        "user-entity"
-      ]
-    },
-    {
-      "id": "order-item-entity",
-      "phase": 3,
-      "status": "pending",
-      "dependencies": [
-        "order-entity",
-        "product-entity"
-      ]
-    },
-    {
-      "id": "order-state-machine",
-      "phase": 3,
-      "status": "pending",
-      "dependencies": [
-        "order-entity"
-      ]
-    },
-    {
-      "id": "auth-endpoints",
-      "phase": 4,
-      "status": "pending",
-      "dependencies": [
-        "role-guard"
-      ]
-    },
-    {
-      "id": "product-endpoints",
-      "phase": 4,
-      "status": "pending",
-      "dependencies": [
-        "preorder-config-entity"
-      ]
-    },
-    {
-      "id": "order-endpoints",
-      "phase": 4,
-      "status": "pending",
-      "dependencies": [
-        "order-state-machine"
-      ]
+      "dependencies": ["global-error-filter"]
     }
   ]
 }
