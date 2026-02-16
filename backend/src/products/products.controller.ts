@@ -1,14 +1,22 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ProductsService } from './products.service';
+import { CreateProductDto } from './dto/create-product.dto';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() body: { title: string; description: string; price: number; sellerId: string; isPreorder?: boolean; availableAt?: string }) {
-    const payload = { ...body, availableAt: body.availableAt ? new Date(body.availableAt) : undefined };
-    return this.productsService.create(payload as any);
+  create(@Body() body: CreateProductDto) {
+    const payload = {
+      title: body.title,
+      description: body.description,
+      price: body.price,
+      sellerId: body.sellerId,
+      isPreorder: body.isPreorder ?? true,
+      availableAt: body.availableAt ? new Date(body.availableAt) : undefined,
+    };
+    return this.productsService.create(payload);
   }
 
   @Get()
