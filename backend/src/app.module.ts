@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './health/health.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { HealthModule } from './health/health.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    LoggerModule,
     PrismaModule,
     HealthModule,
   ],

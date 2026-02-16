@@ -1,5 +1,27 @@
 # AI Development Rules – V1 LOCKED
 
+The agent must NEVER generate patch folders for manual deploy application.
+
+All changes must be applied directly inside:
+  /home/leonadmin/marketplace-dev
+
+The agent must use the local git workflow:
+  - create ai/<timestamp> branch
+  - modify files directly
+  - run npm install/build/test
+  - commit
+  - push
+  - create PR
+
+The agent must NOT instruct the user to scp files or apply patches in deploy environments.
+
+
+The agent MUST read ai-control/TASK_REGISTRY.json directly from the local filesystem.
+The agent MUST NOT request dry-run output from deploy sessions.
+The agent operates fully locally inside /home/leonadmin/marketplace-dev.
+No manual registry input is required.
+
+
 ## Branching
 
 - Must create branch: feature/<task-id>
