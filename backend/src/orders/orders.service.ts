@@ -7,9 +7,17 @@ export class OrdersService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: { buyerId: string; productId: string; quantity: number; }): Promise<Order> {
+    if (data.quantity <= 0) {
+      throw new BadRequestException('Quantity must be greater than 0');
+    }
+
     const product = await this.prisma.product.findUnique({ where: { id: data.productId } });
     if (!product) {
       throw new BadRequestException('Product not found');
+    }
+
+    if (product.sellerId === data.buyerId) {
+      throw new BadRequestException('Seller cannot buy own product');
     }
 
     const total = product.price * data.quantity;
