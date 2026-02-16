@@ -19,10 +19,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       if (typeof res === 'string') {
         message = res;
       } else if (typeof res === 'object' && res !== null) {
-        // @ts-ignore
-        message = (res as any).message || JSON.stringify(res);
-        // @ts-ignore
-        error = (res as any).error || error;
+        // Use a safe typed access instead of ts-ignore
+        const resObj = res as Record<string, unknown>;
+        if (typeof resObj.message === 'string') message = resObj.message as string;
+        if (typeof resObj.error === 'string') error = resObj.error as string;
       }
     } else if (exception instanceof Error) {
       message = exception.message;
@@ -38,9 +38,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     };
 
     // Structured error log using pino
-    (pinoLogger as any).error({
+    const reqAny = request as unknown as { id?: string };
+    pinoLogger.error({
       timestamp: new Date().toISOString(),
-      requestId: (request as any).id,
+      requestId: reqAny.id,
       context: 'Exceptions',
       method: request.method,
       url: request.url,
