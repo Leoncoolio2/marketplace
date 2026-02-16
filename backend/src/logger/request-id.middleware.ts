@@ -1,28 +1,29 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import * as expressRequestId from 'express-request-id';
-import { Request, Response, NextFunction } from 'express';
+import expressRequestId from 'express-request-id';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+import type { Logger } from 'pino';
 
 interface ReqWithId extends Request {
   id?: string;
-  log?: { info?: (...args: any[]) => void };
+  log?: Logger;
 }
 
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
-  use(req: ReqWithId, res: Response, next: NextFunction) {
-    const assignReqId = expressRequestId();
-    assignReqId(req as any, res as any, () => {
+  use(req: ReqWithId, res: Response, next: NextFunction): void {
+    const assignReqId: RequestHandler = expressRequestId();
+    assignReqId(req, res, () => {
       const start = process.hrtime();
       res.on('finish', () => {
         const diff = process.hrtime(start);
         const responseTimeMs = diff[0] * 1e3 + diff[1] / 1e6;
-        const logger = req.log || console;
+        const logger = req.log ?? (console as unknown as Logger);
         logger.info?.({
           time: new Date().toISOString(),
           requestId: req.id,
           context: 'HTTP',
           method: req.method,
-          url: (req as any).originalUrl || req.url,
+          url: req.originalUrl ?? req.url,
           statusCode: res.statusCode,
           responseTimeMs: Math.round(responseTimeMs),
         }, 'request completed');
