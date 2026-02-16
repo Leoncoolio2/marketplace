@@ -1,11 +1,18 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import type { Request, Response, NextFunction } from 'express';
 import { randomUUID } from 'crypto';
-import type { Logger } from 'pino';
+
+interface SimpleLogger {
+  info: (meta: unknown) => void;
+}
 
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
-  use(req: Request & { id?: string; log?: any }, res: Response, next: NextFunction): void {
+  use(
+    req: Request & { id?: string; log?: unknown },
+    res: Response,
+    next: NextFunction,
+  ): void {
     req.id = randomUUID();
 
     const start = Date.now();
@@ -13,8 +20,9 @@ export class RequestIdMiddleware implements NestMiddleware {
     res.on('finish', () => {
       const responseTimeMs = Date.now() - start;
 
-      if (req.log) {
-        req.log.info({
+      const logger = req.log as SimpleLogger | undefined;
+      if (logger && typeof logger.info === 'function') {
+        logger.info({
           requestId: req.id,
           method: req.method,
           url: req.originalUrl,

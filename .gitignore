@@ -9,3 +9,7 @@ SOUL.md
 TOOLS.md
 USER.md
 backend/oc_test.txt
+
+# Ignore transpiled JS
+/backend/dist
+/backend/src/*.js
