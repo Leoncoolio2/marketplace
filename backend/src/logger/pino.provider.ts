@@ -1,7 +1,7 @@
 import pino from 'pino';
 
 // Keep types explicit to satisfy eslint rules
-type PinoOptions = pino.LoggerOptions & { transport?: any };
+type PinoOptions = pino.LoggerOptions & { transport?: Record<string, unknown> };
 const options: PinoOptions = {
   level: process.env.LOG_LEVEL || (process.env.NODE_ENV === 'production' ? 'info' : 'debug'),
   messageKey: 'message',
