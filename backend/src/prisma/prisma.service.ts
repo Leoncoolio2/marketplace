@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
@@ -16,8 +13,7 @@ export class PrismaService
       connectionString: process.env.DATABASE_URL ?? '',
     });
 
-    const adapter: Prisma.PrismaClientOptions['adapter'] =
-      new PrismaPg(pool);
+    const adapter: Prisma.PrismaClientOptions['adapter'] = new PrismaPg(pool);
 
     super({
       adapter,
