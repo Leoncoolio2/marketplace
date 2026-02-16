@@ -21,5 +21,12 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es2019",
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    ...
   }
 }
+

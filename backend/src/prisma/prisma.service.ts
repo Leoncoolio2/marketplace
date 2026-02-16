@@ -16,8 +16,7 @@ export class PrismaService
       connectionString: process.env.DATABASE_URL ?? '',
     });
 
-    const adapter: Prisma.PrismaClientOptions['adapter'] =
-      new PrismaPg(pool);
+    const adapter: Prisma.PrismaClientOptions['adapter'] = new PrismaPg(pool);
 
     super({
       adapter,

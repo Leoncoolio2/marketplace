@@ -1,4 +1,10 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  ExceptionFilter,
+  Catch,
+  ArgumentsHost,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { pinoLogger } from '../../logger/pino.provider';
 
@@ -21,8 +27,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       } else if (typeof res === 'object' && res !== null) {
         // Use a safe typed access instead of ts-ignore
         const resObj = res as Record<string, unknown>;
-        if (typeof resObj.message === 'string') message = resObj.message as string;
-        if (typeof resObj.error === 'string') error = resObj.error as string;
+        if (typeof resObj.message === 'string') message = resObj.message;
+        if (typeof resObj.error === 'string') error = resObj.error;
       }
     } else if (exception instanceof Error) {
       message = exception.message;
@@ -39,17 +45,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     // Structured error log using pino
     const reqAny = request as unknown as { id?: string };
-    pinoLogger.error({
-      timestamp: new Date().toISOString(),
-      requestId: reqAny.id,
-      context: 'Exceptions',
-      method: request.method,
-      url: request.url,
-      status,
-      error: error,
-      message,
-      stack: exception instanceof Error ? exception.stack : undefined,
-    }, 'unhandled exception');
+    pinoLogger.error(
+      {
+        timestamp: new Date().toISOString(),
+        requestId: reqAny.id,
+        context: 'Exceptions',
+        method: request.method,
+        url: request.url,
+        status,
+        error: error,
+        message,
+        stack: exception instanceof Error ? exception.stack : undefined,
+      },
+      'unhandled exception',
+    );
 
     response.status(status).json(responseBody);
   }
