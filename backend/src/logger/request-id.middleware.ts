@@ -3,14 +3,9 @@ import type { Request, Response, NextFunction } from 'express';
 import { randomUUID } from 'crypto';
 import type { Logger } from 'pino';
 
-interface ReqWithLogger extends Request {
-  id?: string;
-  log?: Logger;
-}
-
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
-  use(req: ReqWithLogger, res: Response, next: NextFunction): void {
+  use(req: Request & { id?: string; log?: any }, res: Response, next: NextFunction): void {
     req.id = randomUUID();
 
     const start = Date.now();
